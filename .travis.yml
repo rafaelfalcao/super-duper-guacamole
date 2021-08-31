@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t react-test -f ./client/Dockerfile.dev ./client  
+
+script: #if result codes are different than 0
+  - docker run -e CI=true react-test npm test
+
+after_success:
+  - docker build -t rfalcao/multi-client -f ./client
+  - docker build -t rfalcao/multi-nginx -f ./nginx
+  - docker build -t rfalcao/multi-server -f ./server
+  - docker build -t rfalcao/multi-worker -f ./worker
+
+  #LOGIN TO DOCKER CLI
+   # prints the password after the docker login command 
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  - docker push rfalcao/multi-client
+  - docker push rfalcao/multi-nginx
+  - docker push rfalcao/multi-server
+  - docker push rfalcao/multi-worker
