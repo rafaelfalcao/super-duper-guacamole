@@ -9,10 +9,10 @@ script: #if result codes are different than 0
   - docker run -e CI=true rfalcao/react-test npm test
 
 after_success:
-  - docker build -t rfalcao/multi-client -f ./client
-  - docker build -t rfalcao/multi-nginx -f ./nginx
-  - docker build -t rfalcao/multi-server -f ./server
-  - docker build -t rfalcao/multi-worker -f ./worker
+  - docker build -t rfalcao/multi-client ./client
+  - docker build -t rfalcao/multi-nginx ./nginx
+  - docker build -t rfalcao/multi-server ./server
+  - docker build -t rfalcao/multi-worker ./worker
 
   #LOGIN TO DOCKER CLI
    # prints the password after the docker login command 
