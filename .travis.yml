@@ -18,7 +18,7 @@ after_success:
    # prints the password after the docker login command 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-  - docker push rfalcao/multi-client
+  - docker push rfalcao/multi-client:latest
   - docker push rfalcao/multi-nginx
   - docker push rfalcao/multi-server
   - docker push rfalcao/multi-worker
