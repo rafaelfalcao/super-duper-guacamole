@@ -1,11 +1,13 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
 before_install:
-  - docker build -t rfalcao/react-test -f ./client/Dockerfile.dev ./client  
+  - docker build -t rfalcao/react-test -f ./client/Dockerfile.dev ./client
 
-script: #if result codes are different than 0
+script:
   - docker run -e CI=true rfalcao/react-test npm test
 
 after_success:
@@ -13,15 +15,13 @@ after_success:
   - docker build -t rfalcao/multi-nginx ./nginx
   - docker build -t rfalcao/multi-server ./server
   - docker build -t rfalcao/multi-worker ./worker
-
-  #LOGIN TO DOCKER CLI
-   # prints the password after the docker login command 
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  #push to Docker Hub
+  # Take those images and push them to docker hub
   - docker push rfalcao/multi-client:latest
-  - docker push rfalcao/multi-nginx
-  - docker push rfalcao/multi-server
-  - docker push rfalcao/multi-worker
+  - docker push rfalcao/multi-nginx:latest
+  - docker push rfalcao/multi-server:latest
+  - docker push rfalcao/multi-worker:latest
 
 deploy:
   provider: elasticbeanstalk
